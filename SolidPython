@@ -1,0 +1,168 @@
+import random
+from abc import ABC, abstractmethod
+from random import choice, uniform
+
+class Person(ABC):
+    @abstractmethod
+    def describe(self):
+        pass
+    def get_role(self):
+        pass
+    
+
+class SwapRole(ABC):
+    @abstractmethod
+    def show(self):
+        pass
+    def Change(self):
+        pass
+    def set_inhabitants(self):
+        pass
+    
+####################################################################################################################        
+    
+    
+class Wizard(Person):
+    NICE_WEATHER_WIZARD= 0.9
+    
+    def __init__(self, name, gender, fatherName, motherName):
+        self.name = name
+        self.gender = gender
+        self.fatherName = fatherName
+        self.motherName = motherName
+        self.numberOfPlantedTrees = 0
+        self.random_generator = random.Random()  # instantiation of rand. gen.
+        self.name_of_the_role = 'Wizard'
+        
+        
+    def describe(self):
+        return '{0} {1}, {2} of {3} and {4}. Planted {5} trees. '.format(
+              self.name_of_the_role,
+              self.name, 'son' if self.gender == 'm' else 'daugher',
+              self.fatherName, self.motherName, self.numberOfPlantedTrees)
+    
+    def spel(self):
+        if self.random_generator.random() < self.NICE_WEATHER_WIZARD:
+            self.numberOfPlantedTrees += 1
+            return 'Rzucam czar @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@...'
+        return 'Patrzę jak inni rzucają czary@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@...'
+    
+    def get_role(self):
+        return self.name_of_the_role
+    
+    
+def main():
+    w=Wizard("Jan",'f',"Ewa","Adam")
+    
+####################################################################################################################        
+        
+        
+class Knight(Wizard,Person):
+    def __init__(self, name, gender, fatherName, motherName, weapon='', mount='', strength=1):
+        super().__init__(name, gender, fatherName, motherName)
+        self.name = name
+        self.gender = gender
+        self.fatherName = fatherName
+        self.motherName = motherName
+        self.weapon = weapon
+        self.mount = mount
+        self.strength = strength
+        self.name_of_the_role = 'Knight'
+
+    def describe(self):
+        return '{0} {1}, {2} of {3} and {4}. Fights using a {5} rides on a {6}. '.format(
+              self.name_of_the_role,
+              self.name, 'son' if self.gender == 'm' else 'daugher',
+              self.fatherName, self.motherName, self.weapon, self.mount,
+              'Can fight' if self.strength > 0 else 'Needs a rest')
+
+    def fight(self):
+        if self.strength <= 0:
+            self.strength = 1.0
+            return 'Resting...'
+        self.strength -= 0.25
+        return 'Figting...'
+    
+    def get_role(self):
+        return self.name_of_the_role
+
+
+def main():
+    k = Knight('Quickhand', 'm', 'Bravedeed', 'Sunbell', 'sword', 'horse')
+    k.Wizard('JAN','KOWALSKI','STANISLAW','PONIATOWSKI')
+    
+        
+####################################################################################################################        
+        
+        
+class Gardener(Person):
+    NICE_WEATHER_PROBABILITY = 0.75
+
+    def __init__(self, name, gender, fatherName, motherName):
+        self.name = name
+        self.gender = gender
+        self.fatherName = fatherName
+        self.motherName = motherName
+        self.numberOfPlantedTrees = 0
+        self.random_generator = random.Random()  # instantiation of rand. gen.
+        self.name_of_the_role = 'Gardener'
+
+    def describe(self):
+         return '{0} {1}, {2} of {3} and {4}. Planted {5} trees. '.format(
+              self.name_of_the_role,
+              self.name, 'son' if self.gender == 'm' else 'daugher',
+              self.fatherName, self.motherName, self.numberOfPlantedTrees)
+
+    def plant(self):
+        if self.random_generator.random() < self.NICE_WEATHER_PROBABILITY:
+            self.numberOfPlantedTrees += 1
+            return 'Planting a tree...'
+        return 'Looking at trees growing in the rain...'
+    
+    def get_role(self):
+        return self.name_of_the_role
+
+
+def main():
+    g = Gardener("Greenleaf",'m',"Brownleaf","Goldendaisy")
+    
+        
+####################################################################################################################        
+        
+        
+        
+class Master(SwapRole):
+    def __init__(self):
+        self.list_of_persons = []
+
+    def show(self):
+        for p in self.list_of_persons:
+            print(p.describe())
+
+    def Change(self):
+        for i in range(10):
+            person = choice(self.list_of_persons);
+            #print(person.describe())
+            while uniform(0, 1) < 0.5:
+                if person.get_role() == 'Knight':
+                    print(person.spel())
+                elif person.get_role() == 'Gardener':
+                    print(person.plant())
+                
+                
+
+    def set_inhabitants(self):
+        self.list_of_persons.append(Gardener('Greenleaf','m','Brownleaf','Goldendaisy'));
+        self.list_of_persons.append(Gardener('Slenderwillow','f','Oldoak','Sunnydaisy'));
+        self.list_of_persons.append(Knight('Quickhand','m','Bravedeed','Sunbell','sword','horse'));
+        self.list_of_persons.append(Knight('Truefriend','m','Highspirit','Mistymorning','spear','dragon'));
+        self.list_of_persons.append(Wizard('Jan','f','Janina1','Januszek1'));
+
+def main():
+    m = Master()
+    m.set_inhabitants()
+    m.Change()
+    
+
+if __name__ == '__main__':
+    main()
